@@ -7,28 +7,36 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import static javafx.application.Application.launch;
 
-/**
- * JavaFX App
- */
 public class App extends Application {
 
     private static Scene scene;
 
     @Override
-    public void start(Stage stage) throws IOException {
-        /*scene = new Scene(loadFXML("primary"), 640, 480);
+    public void start(Stage stage) throws Exception 
+    {
+        scene = loadScene("Principal", 300, 280);
+        scene = new Scene(loadFXML("Principal"), 300, 280);
+        stage.setTitle("Loteria Mexicana v1.0");
+        stage.resizableProperty().setValue(Boolean.FALSE);        
         stage.setScene(scene);
-        stage.show();*/
+        stage.show();                                
     }
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+    public static void setRoot(String fxml,int width, int height) throws IOException {       
+        scene.setRoot(loadFXML(fxml)); 
+        //scene = loadScene(fxml, width, height);
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
+    public static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
+    }
+    
+    private static Scene loadScene(String fxml, int width, int height)throws IOException
+    {
+        return new Scene(loadFXML(fxml),width,height);
     }
 
     public static void main(String[] args) {
