@@ -16,8 +16,8 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception 
     {
-        scene = loadScene("Principal", 300, 280);
-        scene = new Scene(loadFXML("Principal"), 300, 280);
+        scene = loadScene("Principal",310, 460);
+        scene = new Scene(loadFXML("Principal"),310, 460);
         stage.setTitle("Loteria Mexicana v1.0");
         stage.resizableProperty().setValue(Boolean.FALSE);        
         stage.setScene(scene);
