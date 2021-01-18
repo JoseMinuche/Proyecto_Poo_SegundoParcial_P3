@@ -34,14 +34,14 @@ public class PrincipalController implements Initializable {
     @FXML
     private void comenzarJuego(ActionEvent event) throws Exception
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("Juego" + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("InicioJuego" + ".fxml"));
         Parent root = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
-        stage.setTitle("Juego Actual");
-        stage.setMaxWidth(1050);
-        stage.setMaxHeight(650);
+        stage.setTitle("Juego en Curso");
+        stage.setMaxWidth(400);
+        stage.setMaxHeight(200);
         stage.setScene(new Scene(root));  
-        stage.show();
+        stage.show(); 
     }
 
     @FXML

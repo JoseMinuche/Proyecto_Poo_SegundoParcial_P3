@@ -15,23 +15,23 @@
       <Pane prefHeight="250.0" prefWidth="400.0" style="-fx-background-color: #d967f5;">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#055bcd" height="250.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="400.0" />
-            <Label layoutX="15.0" layoutY="23.0" text="Panel de Configuracion Juego" textFill="WHITE">
+            <Label layoutX="18.0" layoutY="18.0" text="Panel de Configuracion Juego" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="txt_cantidad" layoutX="15.0" layoutY="124.0" prefHeight="25.0" prefWidth="131.0" promptText="# Oponentes" />
-            <Button layoutX="19.0" layoutY="199.0" mnemonicParsing="false" onAction="#actualizarConfiguracion" text="Guardar">
+            <TextField fx:id="txt_cantidad" layoutX="18.0" layoutY="119.0" prefHeight="25.0" prefWidth="131.0" promptText="# Oponentes" />
+            <Button layoutX="22.0" layoutY="191.0" mnemonicParsing="false" onAction="#actualizarConfiguracion" text="Guardar">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <CheckBox fx:id="chk_VisibilidadCartas" layoutX="15.0" layoutY="82.0" mnemonicParsing="false" text="Visibilidad Cartas de Oponentes" textFill="WHITE">
+            <CheckBox fx:id="chk_VisibilidadCartas" layoutX="18.0" layoutY="77.0" mnemonicParsing="false" text="Visibilidad Cartas de Oponentes" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </CheckBox>
-            <Button layoutX="107.0" layoutY="199.0" mnemonicParsing="false" onAction="#accionRegresar" text="Regresar">
+            <Button layoutX="110.0" layoutY="191.0" mnemonicParsing="false" onAction="#accionRegresar" text="Regresar">
                <font>
                   <Font size="16.0" />
                </font>
