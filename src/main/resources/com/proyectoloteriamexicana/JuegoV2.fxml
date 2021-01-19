@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="750.0" prefWidth="1150.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.JuegoController">
+   <children>
+      <Pane prefHeight="750.0" prefWidth="1150.0">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#055bcd" height="750.0" layoutX="850.0" stroke="BLACK" strokeType="INSIDE" width="300.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#055bcd" height="750.0" stroke="BLACK" strokeType="INSIDE" width="350.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#055bcd" height="750.0" layoutX="350.0" stroke="BLACK" strokeType="INSIDE" width="500.0" />
+            <Pane layoutX="75.0" layoutY="40.0" prefHeight="250.0" prefWidth="200.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="210.0" layoutX="24.0" layoutY="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="150.0" />
+                  <ImageView fx:id="img_AlineacionGanadora" fitHeight="200.0" fitWidth="141.0" layoutX="29.0" layoutY="30.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../../../../../../LoteriaMexicanaP3G6/src/main/resources/formaGanar/cualquiercolumna.PNG" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="20.0" text="Alineación Ganadora" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Label fx:id="lbl_tablero_actual" layoutX="550.0" layoutY="40.0" text="Tablero Actual" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Pane layoutX="75.0" layoutY="350.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <VBox id="loteriaLeft" layoutX="-20.0" layoutY="30.0">
+                     <children>
+                        <Region VBox.vgrow="ALWAYS" />
+                        <HBox id="paneOponentes" fx:id="paneOponentes" />
+                     </children>
+                  </VBox>
+                  <Label layoutX="40.0" text="Mostrar Tablero" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane layoutX="890.0" layoutY="150.0" prefHeight="400.0" prefWidth="225.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#055bcd" height="300.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="225.0" />
+                  <ImageView fx:id="img_NaipeActual" fitHeight="300.0" fitWidth="220.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../../../../../../LoteriaMexicanaP3G6/src/main/resources/imagenesNaipe/back.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="btn_CambiarNaipe" layoutX="25.0" layoutY="325.0" mnemonicParsing="false" onAction="#accionCambiarNaipe" prefWidth="175.0" text="Cambiar Naipe">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+            <Label layoutX="950.0" layoutY="100.0" text="Naipe Actual" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Button layoutX="915.0" layoutY="538.0" mnemonicParsing="false" onAction="#accionVerificarLoteria" prefWidth="175.0" text="Loteria" />
+            <Label fx:id="lbl_tiempo_regresivo" layoutX="991.0" layoutY="36.0" text="3" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="40.0" />
+               </font>
+            </Label>
+            <VBox id="loteriaCenter" alignment="center" layoutX="400.0" layoutY="75.0">
+               <children>
+                  <HBox alignment="center">
+                     <children>
+                        <GridPane fx:id="gridUsuario" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

@@ -3,8 +3,10 @@ package help;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.file.Paths;
 import java.text.Format;
 import java.text.ParseException;
@@ -17,6 +19,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import modelo.Alineacion;
 import modelo.Carta;
+import modelo.Configuracion;
 import modelo.Reporte;
 
 public class HelperJuego 
@@ -76,6 +79,25 @@ public class HelperJuego
         alineacionGanadora = listaAlineaciones.get(indiceAlineacion);        
         return alineacionGanadora;        
     }
+    
+    public static String getAlineacionGanadora(Alineacion alineacion)
+    {
+        switch(alineacion)
+        {
+            case FILA:
+                return "cualquierfila.png";                
+                
+            case COLUMNA:
+                return "cualquiercolumna.png";
+             
+            case ESQUINAS:
+                return "figurasenextremos.png";
+                
+            case EN_CUALQUIER_ESQUINA:
+                return "figurasjuntasenesquina";
+        }
+        return "";
+    }   
     
     public static Carta[][] generarTableroJugador()
     {
@@ -297,4 +319,11 @@ public class HelperJuego
         return lineasArchivo;                 
     }
     
+    public static Configuracion cargarConfiguracion() {
+        try (var in = new ObjectInputStream(new FileInputStream("Configuracion.ser"))) {
+            return (Configuracion)in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            return new Configuracion();
+        }
+    }
 }

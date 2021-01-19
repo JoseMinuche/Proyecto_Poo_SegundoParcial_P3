@@ -1,6 +1,7 @@
 package modelo;
 
 import java.io.Serializable;
+import java.util.Optional;
 import javafx.scene.image.Image;
 
 public class Carta implements Serializable,Comparable<Carta>
@@ -102,8 +103,6 @@ public class Carta implements Serializable,Comparable<Carta>
     @Override
     public int compareTo(Carta o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
+    }        
 }
 

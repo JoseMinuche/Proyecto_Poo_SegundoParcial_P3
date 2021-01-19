@@ -13,7 +13,16 @@ public class Configuracion implements Serializable,Comparable<Configuracion>{
     private boolean visibilidadCarta;
     private int maxCantOponentes;    
     
+    final public static int anchoCartaUsuario = 100;
+    final public static int anchoCartaOponente = 30;
+
+    
     //Constructor
+    public Configuracion()
+    {        
+    } 
+    
+    
     public Configuracion(boolean visibilidadCarta, int maxcantidad)
     {
         this.visibilidadCarta = visibilidadCarta;

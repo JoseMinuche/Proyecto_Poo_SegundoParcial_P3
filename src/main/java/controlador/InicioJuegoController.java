@@ -97,16 +97,17 @@ public class InicioJuegoController implements Initializable {
         try
         {
             //Muestra la pantalla del juego comenzado
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("Juego.fxml"));     
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("JuegoV2.fxml"));     
             Parent root = (Parent)fxmlLoader.load();                  
             JuegoController controlador = fxmlLoader.<JuegoController>getController();                                
             controlador.cargarJuego(juego);
             Stage stage = new Stage();
             stage.setTitle("Juego Comenzado");
-            stage.setScene(new Scene(root, 1050, 600));
+            stage.setScene(new Scene(root, 1150, 750));
             stage.show();  
             Stage stageActual = (Stage) txt_NombreJugador.getScene().getWindow();            
-            stageActual.close();            
+            stageActual.close();           
+            System.out.println("Probado ahora");
         }
         catch(Exception e)
         {

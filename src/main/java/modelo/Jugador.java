@@ -35,4 +35,20 @@ public class Jugador implements Serializable,Comparable<Jugador>
     public int compareTo(Jugador o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public boolean marcarCarta(Carta cartaActual) {
+        var tabla = getTablero();
+        for(int i = 0; i < 4; i ++)
+            for(int j = 0; j < 4; j++)
+                if(tabla[i][j].equals(cartaActual))
+                    return true;
+        return false;
+        /*TODO 
+        if (tabla.contains(cartaActual)) {
+            return tabla.marcarCarta(cartaActual);
+        } else {
+            return false;
+        }
+        */
+    }
 }
