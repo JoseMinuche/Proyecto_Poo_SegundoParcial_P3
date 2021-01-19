@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controlador;
 
 import com.proyectoloteriamexicana.App;
@@ -24,11 +19,6 @@ import modelo.Carta;
 import modelo.Juego;
 import modelo.Jugador;
 
-/**
- * FXML Controller class
- *
- * @author Octavio Lucero
- */
 public class InicioJuegoController implements Initializable {
 
     @FXML
@@ -87,8 +77,7 @@ public class InicioJuegoController implements Initializable {
         jugadores.add(jugadorPC2);
         
         ArrayList<Carta> masoJuego = help.HelperJuego.generarMasoNaipes();        
-        Juego juego = new Juego(jugadores,alineacionGanadora,masoJuego);   
-        System.out.println("termino el proceso");
+        Juego juego = new Juego(jugadores,alineacionGanadora,masoJuego);           
         mostrarPanelJuego(juego);
     }
     
@@ -106,8 +95,7 @@ public class InicioJuegoController implements Initializable {
             stage.setScene(new Scene(root, 1150, 750));
             stage.show();  
             Stage stageActual = (Stage) txt_NombreJugador.getScene().getWindow();            
-            stageActual.close();           
-            System.out.println("Probado ahora");
+            stageActual.close();                       
         }
         catch(Exception e)
         {

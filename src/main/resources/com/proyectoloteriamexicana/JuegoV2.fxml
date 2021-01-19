@@ -63,11 +63,6 @@
                         <Image url="@../../../../../../LoteriaMexicanaP3G6/src/main/resources/imagenesNaipe/back.png" />
                      </image>
                   </ImageView>
-                  <Button fx:id="btn_CambiarNaipe" layoutX="25.0" layoutY="325.0" mnemonicParsing="false" onAction="#accionCambiarNaipe" prefWidth="175.0" text="Cambiar Naipe">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
                </children>
             </Pane>
             <Label layoutX="950.0" layoutY="100.0" text="Naipe Actual" textFill="WHITE">

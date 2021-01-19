@@ -5,7 +5,6 @@ import help.CartasNoVisiblesBlitter;
 import help.StdBlitter;
 import java.io.File;
 import java.net.URL;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -17,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,7 +23,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import modelo.Alineacion;
 import modelo.Carta;
@@ -39,8 +36,7 @@ public class JuegoController implements Initializable {
     @FXML
     private HBox paneOponentes;
     @FXML
-    private GridPane gridUsuario;
-    private ImageView imagenCartaActual;
+    private GridPane gridUsuario;    
 
     Carta[][] tableroHumano = new Carta[4][4];
     Jugador jugadorHumano;
@@ -55,7 +51,7 @@ public class JuegoController implements Initializable {
     ArrayList<Jugador> jugadores;
     ArrayList<Carta> masoCartas;
     Configuracion configuracion;
-    int cantidadJugadores;
+    int cantidadOponentes;
     ArrayList<Jugador> oponentes = new ArrayList<>();
     Carta[][] tableroActual = new Carta[4][4];
     int cantCartaJuego;
@@ -63,15 +59,15 @@ public class JuegoController implements Initializable {
     boolean juegoCorriendo = false;
     static int interval;
     static Timer timer;
+    
+    Jugador ganador;
         
     @FXML
     private ImageView img_AlineacionGanadora;
     @FXML
     private Label lbl_tablero_actual;
     @FXML
-    private ImageView img_NaipeActual;
-    @FXML
-    private Button btn_CambiarNaipe;
+    private ImageView img_NaipeActual;    
     @FXML
     private Label lbl_tiempo_regresivo;
     
@@ -86,35 +82,35 @@ public class JuegoController implements Initializable {
         juegoActual = juego;
         jugadores = juegoActual.getJugadores();
         alineacionGanadora = juegoActual.getAlineacion();
-        cantidadJugadores = jugadores.size();
+        configuracion = help.HelperJuego.cargarConfiguracion();  
+        cantidadOponentes = configuracion.getMaxCantOponentes();
         masoCartas = juegoActual.getMasoCartas();
         juegoCorriendo = true;
         cartaActual = juegoActual.getMasoCartas().get(0);
         cargarImagenCartaInicial();                
         
-        if(cantidadJugadores == 2)
+        if(cantidadOponentes == 1)
         {
             jugadorPC1 = jugadores.get(1);
             oponentes.add(jugadores.get(1));
         }
-        if(cantidadJugadores == 3)      
+        if(cantidadOponentes == 2)      
         {
             jugadorPC1 = jugadores.get(1);
             jugadorPC2 = jugadores.get(2);
             oponentes.add(jugadores.get(1));
             oponentes.add(jugadores.get(2));
         }   
-                       
-        configuracion = help.HelperJuego.cargarConfiguracion();  
+                               
         jugadorHumano = juegoActual.getJugadores().get(0);
         tableroHumano = jugadorHumano.getTablero();        
         
         
-        updateTabla(tableroHumano,  gridUsuario,new StdBlitter(Configuracion.anchoCartaUsuario,this::verificarMarca));                
-        updateAlineacion(juegoActual.getAlineacion());
+        actualizarFormatoTablero(tableroHumano,  gridUsuario,new StdBlitter(Configuracion.anchoCartaUsuario,this::verificarMarca));                
+        actualizarAlineacion(juegoActual.getAlineacion());
         
-        updateTablasOponentes();
-        spawnThread(this::unleashComputadora, true);                
+        actualizarTableroOponente();
+        ejecutarHilo(this::ejecucionOponente, true);                
         iniciarConteoRegresivoNaipe();
     }
 
@@ -125,7 +121,7 @@ public class JuegoController implements Initializable {
         img_NaipeActual.setImage(new Image(new File(imagenCartaActual).toURI().toString())); 
     }        
     
-    private void updateAlineacion(Alineacion alineacion) 
+    private void actualizarAlineacion(Alineacion alineacion) 
     {        
         String alineacionString = help.HelperJuego.getAlineacionGanadora(alineacionGanadora);
         String alineacionImagen = "src/main/resources/formaGanar/"+alineacionString;   
@@ -144,7 +140,10 @@ public class JuegoController implements Initializable {
             iniciarConteoRegresivoNaipe();
         }
         else
+        {
             help.HelperJuego.showMessage(new Alert(Alert.AlertType.ERROR),"Mensaje del Sistema.. ",null,"Se han acabado los naipes!");                                                     
+            juegoCorriendo = false;
+        }
     }
     
     public void cargarNaipeActual()
@@ -188,7 +187,7 @@ public class JuegoController implements Initializable {
         }, 1000,1000);
     }
     
-    private void updateTabla(Carta[][] tabla, GridPane grid, CartaBlitter blitter) {
+    private void actualizarFormatoTablero(Carta[][] tabla, GridPane grid, CartaBlitter blitter) {
         grid.getChildren().clear();
         Node node;
         for(int i = 0; i < 16 ; i++)
@@ -216,10 +215,10 @@ public class JuegoController implements Initializable {
         if(carta.getNumero() == cartaActual.getNumero() && !carta.getCartaSeleccionada()) 
         {
             actualizarTablero(carta);
-            spawnThread(() -> anadirBean((Pane)e.getSource(), Configuracion.anchoCartaUsuario / 2), true);                    
+            ejecutarHilo(() -> mostrarFrejol((Pane)e.getSource(), Configuracion.anchoCartaUsuario / 2), true);                    
         }        
         else if(!carta.getCartaSeleccionada())
-            spawnThread(() -> showX((Pane)e.getSource(), Configuracion.anchoCartaUsuario), true);               
+            ejecutarHilo(() -> mostrarX((Pane)e.getSource(), Configuracion.anchoCartaUsuario), true);               
     }
     
     private void actualizarTablero(Carta carta)
@@ -234,7 +233,7 @@ public class JuegoController implements Initializable {
         }
     }
     
-    private void anadirBean(Pane target, int width) {
+    private void mostrarFrejol(Pane target, int width) {
         var children  = target.getChildren();
         String imagenFrejol = "src/main/resources/imagenesNaipe/bean.png";
         var view = new ImageView(new Image(new File(imagenFrejol).toURI().toString()));
@@ -245,7 +244,7 @@ public class JuegoController implements Initializable {
         Platform.runLater(() -> children.add(view));
     }
 
-    private void showX(Pane target, int width) {
+    private void mostrarX(Pane target, int width) {
         var children = target.getChildren();
         String imagenX = "src/main/resources/imagenesNaipe/x.png";
         var view = new ImageView(new Image(new File(imagenX).toURI().toString()));
@@ -260,26 +259,30 @@ public class JuegoController implements Initializable {
         Platform.runLater(() -> children.remove(view));
     }
     
-    private void updateTablasOponentes() {
+    private void actualizarTableroOponente() {
         paneOponentes.getChildren().clear();
-
+        System.out.println("Update tablero oponentes=>"+oponentes.size());
         for (var op : oponentes) {
             CartaBlitter blitter;
 
             GridPane gridOponente = new GridPane();
             paneOponentes.getChildren().add(gridOponente);
 
-            if (configuracion.getVisibilidadCarta()) {
+            if (configuracion.getVisibilidadCarta()) 
+            {
+                System.out.println("Se muestra las cartas normales ");
                 blitter = new StdBlitter(Configuracion.anchoCartaOponente);
-            } else {
+            } else 
+            {
+                System.out.println("Se muestra las cartas ocultas ");
                 blitter = new CartasNoVisiblesBlitter();
             }
 
-            updateTabla(op.getTablero(), gridOponente, blitter);
+            actualizarFormatoTablero(op.getTablero(), gridOponente, blitter);
         };
     }
     
-    private void spawnThread(Runnable r, boolean daemon) {
+    private void ejecutarHilo(Runnable r, boolean daemon) {
         Thread t = new Thread(r);
         if (daemon) {
             t.setDaemon(true);
@@ -287,56 +290,64 @@ public class JuegoController implements Initializable {
         t.start();
     }
     
-    private void unleashComputadora() {
-        while (juegoActual.isRunning()) {
-            oponentes
-                .stream()
-                .filter(op -> op.marcarCarta(juegoActual.getNaipeActual()))
-                .forEach(op -> {
-                    Platform.runLater(() -> updateTablasOponentes());
+    private void ejecucionOponente() {
+        while (juegoCorriendo) 
+        {
+            for(Jugador op : oponentes)
+            {
+                if(op.marcarCarta(cartaActual))
+                {
+                    //Actualizar el tablero 
+                    op.setTablero(actualizarTableroOponente(op.getTablero(), cartaActual));
+                    Platform.runLater(() -> actualizarTableroOponente());
                     try 
                     { 
                         Thread.sleep(1000); 
                     } 
                     catch (Exception e) 
                     {
-                        
+
                     }
                     try 
                     { 
                         if (help.HelperJuego.verificarJuegoGanado(op.getTablero(), alineacionGanadora)) {
-                            Platform.runLater(() -> terminarJuego());}                                            
+                            Platform.runLater(() -> terminarJuegoOponente(op));}                                            
                     }
                     catch(Exception e)
                     {
-                        
+
                     }
-                });
-        }
+                }
+            }
+        }                       
     }
     
-    private void terminarJuego()
-    {
-        tableroActual = tableroHumano;
-        int jugadorActual = 1;
-        if(help.HelperJuego.verificarJuegoGanado(tableroActual,alineacionGanadora))
+    private Carta[][] actualizarTableroOponente(Carta[][] tablero,Carta carta)
+    {        
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 4 ; j++)
+            {
+                if(tablero[i][j].getNumero() == carta.getNumero())                
+                    tablero[i][j].setCartaSeleccionada(true);
+            }
+        }
+        return  tablero;        
+    }
+    
+    private void terminarJuego(Jugador jugador)
+    {                
+        if(help.HelperJuego.verificarJuegoGanado(jugador.getTablero(),alineacionGanadora))
         {
             try
-            {
-                Jugador jugador = null;
-                if(jugadorActual == 1)
-                    jugador = jugadorHumano;
-                else if(jugadorActual == 2)
-                    jugador = jugadorPC1;
-                else if(jugadorActual == 3) 
-                    jugador = jugadorPC2;
-
+            {                
                 horaFin = new Date();
                 help.HelperJuego.showMessage(new Alert(Alert.AlertType.INFORMATION),"Loteria.. ",null,"Usted ha ganado!");                                             
                 long diferenciaTiempo = horaFin.getTime() - horaInicio.getTime();    
                 int minutos = (int)diferenciaTiempo / (60 * 1000);
                 Reporte reporte = new Reporte(horaFin,minutos,jugador.getNombre(),oponentes.size(),alineacionGanadora.name());
                 Reporte.guardarReporte(reporte);
+                juegoCorriendo = false;                
                 Stage stageActual = (Stage) img_AlineacionGanadora.getScene().getWindow();            
                 stageActual.close(); 
             }
@@ -348,6 +359,26 @@ public class JuegoController implements Initializable {
         else        
             help.HelperJuego.showMessage(new Alert(Alert.AlertType.ERROR),"Error.. ",null,"Usted no ha ganado, favor continue con su juego!");                                                     
     }
+    
+    private void terminarJuegoOponente(Jugador jugador)
+    {                
+        try
+        {            
+            horaFin = new Date();
+            help.HelperJuego.showMessage(new Alert(Alert.AlertType.INFORMATION),"Loteria.. ",null,"Usted ha ganado!");                                             
+            long diferenciaTiempo = horaFin.getTime() - horaInicio.getTime();    
+            int minutos = (int)diferenciaTiempo / (60 * 1000);
+            Reporte reporte = new Reporte(horaFin,minutos,jugador.getNombre(),oponentes.size(),alineacionGanadora.name());
+            Reporte.guardarReporte(reporte);
+            juegoCorriendo = false;                
+            Stage stageActual = (Stage) img_AlineacionGanadora.getScene().getWindow();            
+            stageActual.close(); 
+        }
+        catch(Exception e)
+        {
+
+        }                    
+    }
 
     @FXML
     private void accionCambiarNaipe(ActionEvent event) {
@@ -356,6 +387,6 @@ public class JuegoController implements Initializable {
     @FXML
     private void accionVerificarLoteria(ActionEvent event) 
     {
-        terminarJuego();
+        terminarJuego(jugadorHumano);
     }
 }

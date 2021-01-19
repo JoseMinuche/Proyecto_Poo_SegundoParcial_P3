@@ -32,8 +32,7 @@ public class StdBlitter implements CartaBlitter {
         ImageView view = new ImageView(image);
         view.setFitWidth(anchoCarta);
         view.setPreserveRatio(true);
-
-        
+       
         if (onClickHandler != null) {
             st.setOnMouseClicked(e -> onClickHandler.accept(e, carta));
 
@@ -48,19 +47,35 @@ public class StdBlitter implements CartaBlitter {
             });
             System.out.println("Se setean los listener");
         }                
-        st.getChildren().add(view);
-
-        //TODO
-        /*
-        //if (tabla.isMarcada(carta)) 
-        //{
-            String imagenFrejol = "src/main/resources/imagenesNaipe/bean.png";
-            ImageView bean  = new ImageView(new Image(imagenFrejol));
+        st.getChildren().add(view); 
+        if(carta.getCartaSeleccionada())
+        {
+            String imagenFrejol = "src/main/resources/imagenesNaipe/bean.png";            
+            ImageView bean  = new ImageView(new Image(new File(imagenFrejol).toURI().toString()));
             bean.setFitWidth(anchoCarta  / 2);
             bean.setPreserveRatio(true);
             st.getChildren().add(bean);
-        //}
-        */
+        }
         return st;
+    }
+    
+    public boolean marcarCarta(Carta[][] tablero, Carta cartaActual) 
+    {
+        for(int i = 0; i < 4 ; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {                
+                var carta = tablero[i][j];
+                System.out.println("carta Tablero=>"+carta.getNombre()+" - "+carta.getNumero());
+                System.out.println("carta actual=>"+cartaActual.getNombre()+" - "+cartaActual.getNumero());
+                if(carta.getNumero() == cartaActual.getNumero() && !carta.getCartaSeleccionada())            
+                {                                                                                                                                                                      
+                    System.out.println("Marcar carta  carta Tablero=>"+carta.getNombre()+" - "+carta.getNumero());
+                    return true;
+                }
+                    
+            }            
+        }               
+        return false;                
     }
 }
